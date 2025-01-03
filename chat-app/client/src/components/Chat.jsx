@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 function Chat({ socket, userName }) {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-
+  const [users,setUsers]=useState([])
   useEffect(() => {
     socket.on("messageResponse", (data) => {
       setMessageList((prev) => [...prev, data]);
     });
-
+    socket.on("users",data=>setUsers(data))
     return () => {
       socket.off("messageResponse");
     };
@@ -37,9 +37,22 @@ function Chat({ socket, userName }) {
       setMessage("");
     }
   };
-
+console.log(users,"users displaying ")
   return (
     <div className="chatContainer bg-gray-100 h-screen flex flex-col">
+    <div className="userList w-1/2 bg-gray-200 p-4 border-r border-gray-300">
+        <h1 className="text-2xl font-bold mb-4">Users</h1>
+        <ul className="space-y-2">
+          {users?.map((user) => (
+            <li
+              key={user.socketID}
+              className={`p-2 rounded-lg cursor-pointer bg-blue-500 text-white`}
+            >
+              {user.userName}
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="messages flex-grow overflow-y-auto p-4 space-y-4">
         {messageList.map((msg, index) => (
           <div
@@ -63,7 +76,6 @@ function Chat({ socket, userName }) {
         ))}
       </div>
 
-      {/* Input Section */}
       <form
         onSubmit={handleSendMessage}
         className="flex items-center p-4 bg-white border-t border-gray-300"
