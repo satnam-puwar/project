@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (data) => {
-    io.emit("messageResponse", data);
+    socket.broadcast.emit("messageResponse", data);
   });
 
   socket.on("disconnect", () => {
