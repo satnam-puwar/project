@@ -1,11 +1,12 @@
-import express from "express";
-import { webhookHandler } from "./testing";
-console.log(webhookHandler,"test..")
+const express = require("express");
+const cors=require("cors")
+const webhookHandler=require("./testing")
 const app = express();
 const port = 8000;
 app.use(express.json())
+app.use(cors())
 app.post("/webhook", async (req, res) => {
-    try {
+    try {   
       const response = await webhookHandler(req.body);
       res.status(response.status).send(response.body);
     } catch (error) {

@@ -1,16 +1,16 @@
-import axios from "axios";
+const axios = require("axios");
 
-export const webhookHandler= async(event)=> {
+ const webhookHandler= async(event)=> {
   const apiUrl = "https://api.openai.com/v1/chat/completions";
-  const apiKey = "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";
-
+  const apiKey = "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"
   try {
-    const userMessage = event.body?.message || "Test message: Is the webhook working?";
+    console.log( event,"test..")
+    const userMessage = event?.message|| "Test message: Is the webhook working?";
 
     const response = await axios.post(
       apiUrl,
       {
-        model: "gpt-4",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: "You are a helpful assistant." },
           { role: "user", content: userMessage },
@@ -24,7 +24,6 @@ export const webhookHandler= async(event)=> {
       }
     );
 
-    console.log("API Response:", response.data);
 
     return {
       status: 200,
@@ -47,3 +46,4 @@ export const webhookHandler= async(event)=> {
     };
   }
 }
+module.exports=webhookHandler
